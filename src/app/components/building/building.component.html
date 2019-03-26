@@ -1,0 +1,143 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h3 class="display-5">ข้อมูลอาคาร</h3>
+    <p class="lead" class="text-success">Rajamangala University of Technology Isan</p>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon2">Searc</span>
+      </div>
+      <input type="text" class="form-control" [(ngModel)]="searchData" (keyup)="getBuildingSystem()" />
+      <div class="input-group-append">
+        <button type="button" class="btn btn-warning" (click)="searchData = ''; getBuildingSystem()">
+          Clear
+        </button>
+      </div>
+    </div>
+    <div class="text-right mb-3">
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"
+        (click)="formState(null)">
+        เพิ่มข้อมูล
+      </button>
+    </div>
+    </div>
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th scope="col" style="vertical-align: middle;">#</th>
+        <th scope="col" style="vertical-align: middle;">Building Number</th>
+        <th scope="col" style="vertical-align: middle;">Building Name</th>
+        <th scope="col" style="vertical-align: middle;">Personnel</th>
+        <th scope="col" style="vertical-align: middle;">Floor</th>
+        <th scope="col" style="vertical-align: middle;">Class</th>
+        <th scope="col" style="vertical-align: middle;">Detail</th>
+        <th scope="col" style="vertical-align: middle;">ผู้ดูแล</th>
+        <th scope="col" style="vertical-align: middle;">ActionBuilding</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="building">
+      <tr *ngFor="
+        let x of (building
+          | paginate: { itemsPerPage: rowTable, currentPage: pageTable });
+        let i = index
+      ">
+      <!-- rowTableNumber จะถูกเรียกใช้เมื่อครบ 10 แถวจะเริ่มหน้าใหม่ -->
+        <td style="vertical-align: middle;">{{ rowTableNumber(i + 1) }}</td>
+        <td style="vertical-align: middle;">{{ x.buildding_id }}</td>
+        <td style="vertical-align: middle;">{{ x.buildName }}</td>
+        <td style="vertical-align: middle;">{{ x.personnelName }}</td>
+        <td style="vertical-align: middle;">{{ x.floorOfBuilding }}</td>
+        <td style="vertical-align: middle;">{{ x.class ? x.class : "ว่าง" }}</td>
+        <td style="vertical-align: middle;">
+          {{ x.roomName ? x.roomName : "ว่าง" }}
+        </td>
+        <td style="vertical-align: middle;">{{ x.adminbuildingName }}</td>
+        <td style="vertical-align: middle;">
+          <span style="margin-left: 5px;margin-right: 5px;">
+            <button type="button" class="btn btn-warning text-white btn-sm" (click)="formState(x)" data-toggle="modal"
+              data-target="#exampleModal">
+              แก้ไข
+            </button>
+          </span>
+          <span style="margin-left: 5px;margin-right: 5px;">
+            <button type="button" class="btn btn-danger text-white btn-sm" (click)="deleteBuilding(x.id)">
+              ลบ
+            </button>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="pageTable = $event"></pagination-controls>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form [formGroup]="formBuilding" (ngSubmit)="updateBuilding(formBuilding)">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Building</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group mb-3" *ngIf="allBuilding">
+              <label for="exampleFormControlSelect1">Building</label>
+              <select class="form-control" formControlName="building">
+                <option *ngFor="let x of allBuilding" [value]="x.id">{{
+                x.name
+              }}</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-3" *ngIf="allPersonnel">
+              <label for="exampleFormControlSelect1">Personnel</label>
+              <select class="form-control" formControlName="personnel">
+                <option *ngFor="let x of allPersonnel" [value]="x.id">{{
+                x.name
+              }}</option>
+              </select>
+            </div>
+
+            <div class="form-group  mb-3">
+              <label for="exampleFormControlInput1">Floor</label>
+              <input type="text" class="form-control" formControlName="floor" />
+            </div>
+
+            <div class="form-group  mb-3">
+              <label for="exampleFormControlInput1">Class</label>
+              <input type="text" class="form-control" formControlName="class" />
+            </div>
+
+            <div class="form-group mb-3" *ngIf="allRoom">
+              <label for="exampleFormControlSelect1">Room</label>
+              <select class="form-control" formControlName="room">
+                <option value="">{{ " ว่าง " }}</option>
+                <option *ngFor="let x of allRoom" [value]="x.id">{{
+                x.name
+              }}</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-3" *ngIf="allAddminBuilding">
+              <label for="exampleFormControlSelect1">Admin Building</label>
+              <select class="form-control" formControlName="admin">
+                <option *ngFor="let x of allAddminBuilding" [value]="x.id">{{
+                x.name
+              }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="formBuilding.invalid">
+              Save changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

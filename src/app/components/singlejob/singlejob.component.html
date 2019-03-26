@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-4">
+    <div class="list-group" id="list-tab" role="tablist">
+      <a class="list-group-item list-group-item-primary active" id="list-home-list" data-toggle="list" href="#list-home"
+        role="tab" aria-controls="home">นายเกษม พาพุทธ</a>
+      <a class="list-group-item list-group-item-primary" id="list-profile-list" data-toggle="list" href="#list-profile"
+        role="tab" aria-controls="profile">ปฏิภาณ วงศ์จันทร์</a>
+      <a class="list-group-item list-group-item-primary" id="list-messages-list" data-toggle="list"
+        href="#list-messages" role="tab" aria-controls="messages">พรราชฤทธ์ โพธิ์กลิ่น</a>
+
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+        ข้อมูลบางส่วนเท่านั้น <br>
+        ห้องบรรยายห้องปฎิบัติการห้องประชุมอยู่อาคารไหนและชั้นไหนบ้าง <br>
+        SELECT building.name,buildsystem.class,room.id,room.name <br>
+        FROM room,buildsystem <br>
+  INNER JOIN  building ON buildsystem.buildding_id = building.id <br>
+  WHERE room.name LIKE "%ห้องบรรยาย%" OR room.name LIKE "%ห้องประชุม%"  OR room.name LIKE "%ห้องปฏิบัติการ%" AND room.id = buildsystem.room_id <br>
+ GROUP BY room.id <br>
+ ORDER BY room.name
+        <br>
+        <img src="assets\img\logo\Capture3.PNG" alt="" width="500" height="500">
+        <img src="assets\img\logo\Capture4.PNG" alt="" width="500" height="500">
+        <img src="assets\img\logo\Capture5.PNG" alt="" width="300" height="50">
+      </div>
+
+      <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+        ข้อมูลบางส่วนเท่านั้น  <br>
+        คณะที่ดูแลอาคารน้อยที่สุด  <br>
+        SELECT
+        adminbuilding.id,adminbuilding.name,COUNT(adminbuilding.id) AS NUM
+     FROM <br>
+     คณะที่ดูแลอาคารน้อยที่สุด <br>
+         buildsystem <br>
+     INNER JOIN room ON buildsystem.room_id = room.id <br>
+     INNER JOIN adminbuilding ON adminbuilding.id =buildsystem.adminBuilding_id <br>
+     GROUP BY adminbuilding.id <br>
+     ORDER BY NUM ASC LIMIT 5 <br>
+     SELECT adminbuilding.id,adminbuilding.name,COUNT(adminbuilding.id) AS NUM <br>
+     <img src="assets\img\logo\54727483_244573769831595_7787722760821669888_n.png" alt="" width="400"
+          height="300"><br>
+     คณะที่ดูแลอาคารมากที่สุด <br>
+FROM <br>
+    buildsystem <br>
+INNER JOIN room ON buildsystem.room_id = room.id <br>
+INNER JOIN adminbuilding ON adminbuilding.id =buildsystem.adminBuilding_id <br>
+GROUP BY adminbuilding.id <br>
+ORDER BY NUM DESC LIMIT 5 <br>
+        <img src="assets\img\logo\55576185_322020131999612_6088065293962182656_n.png" alt="" width="400" height="300">
+      </div>
+      <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+        ยกตัวอย่างข้อมูลบางส่วน <br>
+          แต่ล่ะอาคารมีทั้งหมดกี่ชั้น <br>
+        SELECT bu.name , st.floorOfBuilding <br>
+        FROM building AS bu , buildsystem AS st <br>
+        WHERE bu.id = st.buildding_id <br>
+        GROUP BY st.floorOfBuilding <br>
+        pariatur cillum. <br>
+
+        <img src="assets\img\logo\53852508_230527544460826_6905765863836614656_n.png" alt="" width="400" height="300"><br>
+        แต่ล่ะชั้นมีทั้งหมดกี่ห้อง <br>
+        SELECT st.buildding_id , st.class , COUNT(ro.id) <br>
+FROM buildsystem AS st , room AS ro <br>
+WHERE st.room_id = ro.id AND buildding_id='1' <br>
+GROUP by st.class <br>
+ORDER BY st.buildding_id,st.class <br>
+
+        <img src="assets\img\logo\55692881_794329657606526_2608371133925294080_n.png" alt="" width="400" height="300">
+      </div>
+    </div>
+  </div>
+</div>
